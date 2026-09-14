@@ -291,27 +291,27 @@ Focus count query uses partial index `(user_id, focus_date) WHERE focus_date IS 
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly: `npx supabase db reset`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Type checking passes: `npx astro check`
-- [x] 1.4 Production build passes: `npm run build`
+- [x] 1.1 Migration applies cleanly: `npx supabase db reset` — 8d27688
+- [x] 1.2 Linting passes: `npm run lint` — 8d27688
+- [x] 1.3 Type checking passes: `npx astro check` — 8d27688
+- [x] 1.4 Production build passes: `npm run build` — 8d27688
 
 #### Manual
 
-- [x] 1.5 Fourth focus insert fails with `focus_limit_exceeded`; cross-user RLS isolation verified
-- [x] 1.6 UPDATE title/completed_at without changing focus_date succeeds; unset focus always succeeds
+- [x] 1.5 Fourth focus insert fails with `focus_limit_exceeded`; cross-user RLS isolation verified — 8d27688
+- [x] 1.6 UPDATE title/completed_at without changing focus_date succeeds; unset focus always succeeds — 8d27688
 
 ### Phase 2: Application contract
 
 #### Automated
 
-- [ ] 2.1 Linting passes: `npm run lint`
-- [ ] 2.2 Type checking passes: `npx astro check`
-- [ ] 2.3 Production build passes: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint`
+- [x] 2.2 Type checking passes: `npx astro check`
+- [x] 2.3 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 2.4 `checkFocusLimit` returns `allowed: false` at 3 focused tasks; `validateFocusDate` rejects out-of-window dates
+- [x] 2.4 `checkFocusLimit` returns `allowed: false` at 3 focused tasks; `validateFocusDate` rejects out-of-window dates
 
 ### Phase 3: Verification and documentation
 
