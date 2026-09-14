@@ -1,0 +1,79 @@
+# Regresja promptu code review — porównanie modeli na tych samych diffach.
+# Uruchomienie: npm run eval:code-review
+# Wymaga: CURSOR_API_KEY w env
+
+description: Loopdeck CI code review — 3 modele × 3 diffy
+
+prompts:
+  - "{{diff}}"
+
+providers:
+  - id: file://providers/cursor-agent.mjs
+    label: composer-2.5-fast
+    config:
+      model: composer-2.5-fast
+  - id: file://providers/cursor-agent.mjs
+    label: composer-2.5
+    config:
+      model: composer-2.5
+  - id: file://providers/cursor-agent.mjs
+    label: gpt-5-mini
+    config:
+      model: gpt-5-mini
+
+defaultTest:
+  options:
+    transform: |
+      (() => {
+        const text = (typeof output === 'string' ? output : String(output ?? '')).trim();
+        const start = text.indexOf('{');
+        const end = text.lastIndexOf('}');
+        if (start === -1 || end <= start) return { parseError: true, raw: text };
+        try {
+          return JSON.parse(text.slice(start, end + 1));
+        } catch (e) {
+          return { parseError: true, raw: text };
+        }
+      })()
+
+tests:
+  - description: buggy focus limit — must reject product invariants
+    vars:
+      diff: file://../scripts/fixtures/code-review-diff.patch
+    assert:
+      - type: javascript
+        value: "!output.parseError"
+      - type: is-json
+        value: file://../scripts/code-review/schema.json
+      - type: javascript
+        value: output.criteria.product_invariants.verdict === 'FAIL'
+      - type: javascript
+        value: output.overall_verdict === 'REJECT' || output.overall_verdict === 'REQUEST_CHANGES'
+
+  - description: good comment-only change — should approve
+    vars:
+      diff: file://../scripts/fixtures/code-review-diff-good.patch
+    assert:
+      - type: javascript
+        value: "!output.parseError"
+      - type: is-json
+        value: file://../scripts/code-review/schema.json
+      - type: javascript
+        value: output.overall_verdict === 'APPROVE'
+      - type: javascript
+        value: Object.values(output.criteria).every((c) => c.verdict === 'PASS')
+
+  - description: API without zod/auth — must fail security
+    vars:
+      diff: file://../scripts/fixtures/code-review-diff-api-no-zod.patch
+    assert:
+      - type: javascript
+        value: "!output.parseError"
+      - type: is-json
+        value: file://../scripts/code-review/schema.json
+      - type: javascript
+        value: |
+          output.criteria.security_auth.verdict === 'FAIL' ||
+          output.criteria.api_data_layer.verdict === 'FAIL'
+      - type: javascript
+        value: output.overall_verdict !== 'APPROVE'

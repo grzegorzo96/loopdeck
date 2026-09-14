@@ -1,0 +1,24 @@
+diff --git a/src/pages/api/tasks/quick-add.ts b/src/pages/api/tasks/quick-add.ts
+new file mode 100644
+index 0000000..abc1234
+--- /dev/null
++++ b/src/pages/api/tasks/quick-add.ts
+@@ -0,0 +1,18 @@
++import type { APIRoute } from "astro";
++import { jsonResponse } from "@/lib/api/json";
++
++export const prerender = false;
++
++export const POST: APIRoute = async (context) => {
++  const body = await context.request.json();
++  const title = body.title as string;
++
++  const { data, error } = await context.locals.supabase
++    .from("tasks")
++    .insert({ title, user_id: body.userId })
++    .select()
++    .single();
++
++  if (error) return jsonResponse({ error: error.message }, 500);
++  return jsonResponse(data);
++};
