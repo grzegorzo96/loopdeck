@@ -126,6 +126,14 @@ export default function SignUpForm({ serverError }: Props) {
 
       <ServerError message={serverError} />
 
+      <p className="text-center text-xs text-blue-100/60">
+        By creating an account you agree to our{" "}
+        <a href="/privacy" className="underline hover:text-white">
+          Privacy policy
+        </a>
+        .
+      </p>
+
       <SubmitButton pendingText="Creating account..." icon={<UserPlus className="size-4" />}>
         Create account
       </SubmitButton>
