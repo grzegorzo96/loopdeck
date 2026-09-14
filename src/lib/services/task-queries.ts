@@ -101,12 +101,7 @@ export async function setTaskFocus(supabase: SupabaseClient, taskId: string, loc
 }
 
 export async function unsetTaskFocus(supabase: SupabaseClient, taskId: string): Promise<Task> {
-  const result = await supabase
-    .from("tasks")
-    .update({ focus_date: null })
-    .eq("id", taskId)
-    .select("*")
-    .maybeSingle();
+  const result = await supabase.from("tasks").update({ focus_date: null }).eq("id", taskId).select("*").maybeSingle();
 
   if (result.error) throw result.error;
   if (!result.data) throw new Error("not_found");

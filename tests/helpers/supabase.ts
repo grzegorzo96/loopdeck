@@ -65,6 +65,13 @@ export async function createTestUser(): Promise<TestUser> {
   return { userId, client, email };
 }
 
+export function requireRowId(row: unknown): string {
+  if (typeof row !== "object" || row === null || !("id" in row) || typeof row.id !== "string") {
+    throw new Error("expected row id");
+  }
+  return row.id;
+}
+
 export async function deleteAllUserTasks(userId: string): Promise<void> {
   const { url, serviceRoleKey } = getSupabaseEnv();
   const admin = createClient(url, serviceRoleKey, {

@@ -2,7 +2,7 @@
 //   A Supabase migration passes locally but corrupts or locks prod task rows.
 import { describe, expect, it } from "vitest";
 import { createClient } from "@supabase/supabase-js";
-import { getSupabaseEnv } from "../helpers/supabase";
+import { getSupabaseEnv, requireRowId } from "../helpers/supabase";
 
 describe("Risk #3 — migration schema sanity", () => {
   it("tasks table exists with expected columns", async () => {
@@ -35,19 +35,20 @@ describe("Risk #3 — migration schema sanity", () => {
     });
     expect(owner.error).toBeNull();
 
-    const userId = owner.data.user!.id;
-    const inserted = await admin
-      .from("tasks")
-      .insert({ user_id: userId, title: "RLS probe" })
-      .select("id")
-      .single();
-    expect(inserted.error).toBeNull();
+    const userId = owner.data.user?.id;
+    if (!userId) {
+      throw new Error("expected created user id");
+    }
 
-    const { data, error } = await anon.from("tasks").select("id").eq("id", inserted.data!.id);
+    const inserted = await admin.from("tasks").insert({ user_id: userId, title: "RLS probe" }).select("id").single();
+    expect(inserted.error).toBeNull();
+    const insertedId = requireRowId(inserted.data);
+
+    const { data, error } = await anon.from("tasks").select("id").eq("id", insertedId);
     expect(error).toBeNull();
     expect(data).toEqual([]);
 
-    await admin.from("tasks").delete().eq("id", inserted.data!.id);
+    await admin.from("tasks").delete().eq("id", insertedId);
     await admin.auth.admin.deleteUser(userId);
   });
 });

@@ -8,6 +8,7 @@ import {
   deleteAllUserTasks,
   deleteTestUser,
   getSupabaseEnv,
+  requireRowId,
   type TestUser,
 } from "../helpers/supabase";
 
@@ -91,10 +92,11 @@ describe("Risk #4 — lazy day reset on read", () => {
       .select("id")
       .single();
     expect(inserted.error).toBeNull();
+    const insertedId = requireRowId(inserted.data);
 
     const lists = await listTasks(user.client, today);
-    expect(lists.focus.some((task) => task.id === inserted.data!.id)).toBe(false);
-    expect(lists.backlog.some((task) => task.id === inserted.data!.id)).toBe(false);
+    expect(lists.focus.some((task) => task.id === insertedId)).toBe(false);
+    expect(lists.backlog.some((task) => task.id === insertedId)).toBe(false);
   });
 });
 

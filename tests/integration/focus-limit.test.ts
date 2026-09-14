@@ -63,10 +63,10 @@ describe("Risk #1 — fourth focus refused", () => {
     }
 
     for (let index = 0; index < 3; index++) {
-      await setTaskFocus(user.client, backlogIds[index]!, localDate);
+      await setTaskFocus(user.client, backlogIds[index], localDate);
     }
 
-    await expect(setTaskFocus(user.client, backlogIds[3]!, localDate)).rejects.toThrow("focus_limit_exceeded");
+    await expect(setTaskFocus(user.client, backlogIds[3], localDate)).rejects.toThrow("focus_limit_exceeded");
 
     const lists = await listTasks(user.client, localDate);
     expect(lists.focus).toHaveLength(3);
@@ -93,13 +93,13 @@ describe("Risk #1 — fourth focus refused", () => {
 
     const lists = await swapTaskFocus(user.client, {
       taskId: backlog.id,
-      swapOutId: focused[0]!,
+      swapOutId: focused[0],
       localDate,
     });
 
     expect(lists.focus).toHaveLength(3);
     expect(lists.focus.some((task) => task.id === backlog.id)).toBe(true);
-    expect(lists.backlog.some((task) => task.id === focused[0]!)).toBe(true);
+    expect(lists.backlog.some((task) => task.id === focused[0])).toBe(true);
   });
 });
 
@@ -131,7 +131,7 @@ describe("Risk #5 — completion does not free a focus slot", () => {
       focused.push(task.id);
     }
 
-    const completed = await completeTask(user.client, focused[0]!, localDate);
+    const completed = await completeTask(user.client, focused[0], localDate);
     expect(completed.newlyCompleted).toBe(true);
     expect(completed.task.completed_at).not.toBeNull();
     expect(completed.task.focus_date).toBe(localDate);
@@ -161,7 +161,7 @@ describe("Risk #5 — completion does not free a focus slot", () => {
       focused.push(task.id);
     }
 
-    await completeTask(user.client, focused[0]!, localDate);
+    await completeTask(user.client, focused[0], localDate);
 
     const backlog = await createTask(user.client, {
       title: "swap after complete",
@@ -172,7 +172,7 @@ describe("Risk #5 — completion does not free a focus slot", () => {
 
     const lists = await swapTaskFocus(user.client, {
       taskId: backlog.id,
-      swapOutId: focused[0]!,
+      swapOutId: focused[0],
       localDate,
     });
 
@@ -199,7 +199,7 @@ describe("Risk #5 — completion does not free a focus slot", () => {
       localDate,
     });
 
-    await unsetTaskFocus(user.client, focused[0]!);
+    await unsetTaskFocus(user.client, focused[0]);
     await setTaskFocus(user.client, backlog.id, localDate);
 
     const lists = await listTasks(user.client, localDate);
