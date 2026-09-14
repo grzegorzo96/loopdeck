@@ -56,7 +56,7 @@ async function main() {
 
   if (!apiKey) {
     console.error("\n❌ Brak CURSOR_API_KEY.");
-    console.error("   Ustaw klucz: export CURSOR_API_KEY=\"cursor_...\"");
+    console.error('   Ustaw klucz: export CURSOR_API_KEY="cursor_..."');
     console.error("   Albo zaloguj SDK: npm run sdk:login");
     console.error("   Klucz: Cursor Dashboard → Integrations → User API Keys");
     process.exit(1);

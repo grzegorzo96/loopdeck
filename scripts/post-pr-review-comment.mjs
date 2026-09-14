@@ -8,9 +8,10 @@ const reviewPath = process.argv[2] ?? "review.json";
 const prNumber = process.env.PR_NUMBER ?? process.env.GITHUB_EVENT_PULL_REQUEST_NUMBER;
 const token = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
 const repo = process.env.GITHUB_REPOSITORY;
-const runUrl = process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY && process.env.GITHUB_RUN_ID
-  ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
-  : "";
+const runUrl =
+  process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY && process.env.GITHUB_RUN_ID
+    ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+    : "";
 
 async function github(path, { method = "GET", body } = {}) {
   const response = await fetch(`https://api.github.com/repos/${repo}${path}`, {
