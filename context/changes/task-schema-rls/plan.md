@@ -305,22 +305,22 @@ Focus count query uses partial index `(user_id, focus_date) WHERE focus_date IS 
 
 #### Automated
 
-- [x] 2.1 Linting passes: `npm run lint`
-- [x] 2.2 Type checking passes: `npx astro check`
-- [x] 2.3 Production build passes: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint` — 84e5a46
+- [x] 2.2 Type checking passes: `npx astro check` — 84e5a46
+- [x] 2.3 Production build passes: `npm run build` — 84e5a46
 
 #### Manual
 
-- [x] 2.4 `checkFocusLimit` returns `allowed: false` at 3 focused tasks; `validateFocusDate` rejects out-of-window dates
+- [x] 2.4 `checkFocusLimit` returns `allowed: false` at 3 focused tasks; `validateFocusDate` rejects out-of-window dates — 84e5a46
 
 ### Phase 3: Verification and documentation
 
 #### Automated
 
-- [ ] 3.1 Linting passes: `npm run lint`
-- [ ] 3.2 Type checking passes: `npx astro check`
-- [ ] 3.3 Production build passes: `npm run build`
+- [x] 3.1 Linting passes: `npm run lint`
+- [x] 3.2 Type checking passes: `npx astro check`
+- [x] 3.3 Production build passes: `npm run build`
 
 #### Manual
 
-- [ ] 3.4 Full local checklist completed; README updated; smoke CI applies migration cleanly
+- [x] 3.4 Full local checklist completed; README updated; smoke CI applies migration cleanly
