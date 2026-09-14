@@ -22,7 +22,7 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci
+      - run: npm ci --omit=dev
 
       - name: Prepare PR diff
         run: git diff "${{ github.event.pull_request.base.sha }}"..."${{ github.sha }}" > pr.diff
