@@ -317,10 +317,10 @@ Focus count query uses partial index `(user_id, focus_date) WHERE focus_date IS 
 
 #### Automated
 
-- [x] 3.1 Linting passes: `npm run lint`
-- [x] 3.2 Type checking passes: `npx astro check`
-- [x] 3.3 Production build passes: `npm run build`
+- [x] 3.1 Linting passes: `npm run lint` — 3c3d045
+- [x] 3.2 Type checking passes: `npx astro check` — 3c3d045
+- [x] 3.3 Production build passes: `npm run build` — 3c3d045
 
 #### Manual
 
-- [x] 3.4 Full local checklist completed; README updated; smoke CI applies migration cleanly
+- [x] 3.4 Full local checklist completed; README updated; smoke CI applies migration cleanly — 3c3d045
