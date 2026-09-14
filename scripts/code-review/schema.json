@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://loopdeck.dev/schemas/code-review-response.json",
+  "title": "CodeReviewResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["summary", "criteria", "overall_verdict"],
+  "properties": {
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "1-2 zdania podsumowania review po polsku"
+    },
+    "criteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_invariants",
+        "security_auth",
+        "stack_conventions",
+        "api_data_layer",
+        "scope_regression"
+      ],
+      "properties": {
+        "product_invariants": { "$ref": "#/$defs/criterionResult" },
+        "security_auth": { "$ref": "#/$defs/criterionResult" },
+        "stack_conventions": { "$ref": "#/$defs/criterionResult" },
+        "api_data_layer": { "$ref": "#/$defs/criterionResult" },
+        "scope_regression": { "$ref": "#/$defs/criterionResult" }
+      }
+    },
+    "overall_verdict": {
+      "type": "string",
+      "enum": ["APPROVE", "REQUEST_CHANGES", "REJECT"]
+    }
+  },
+  "$defs": {
+    "criterionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "findings"],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": ["PASS", "FAIL"]
+        },
+        "findings": {
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 300
+          }
+        }
+      }
+    }
+  }
+}
