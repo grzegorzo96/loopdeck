@@ -9,9 +9,9 @@ prompts:
 
 providers:
   - id: file://providers/cursor-agent.mjs
-    label: composer-2.5-fast
+    label: composer-2
     config:
-      model: composer-2.5-fast
+      model: composer-2
   - id: file://providers/cursor-agent.mjs
     label: composer-2.5
     config:

@@ -25,13 +25,16 @@ jobs:
       - run: npm ci --omit=dev
 
       - name: Prepare PR diff
-        run: git diff "${{ github.event.pull_request.base.sha }}"..."${{ github.sha }}" > pr.diff
+        run: |
+          git diff "${{ github.event.pull_request.base.sha }}"..."${{ github.sha }}" \
+            -- . ':(exclude)package-lock.json' ':(exclude)*.lock' > pr.diff
+          wc -c pr.diff
 
       - name: Run code review agent
         id: agent
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-          SDK_MODEL: composer-2.5-fast
+          SDK_MODEL: composer-2.5
         run: node scripts/code-review-agent.mjs --ci --json-out review.json pr.diff
 
       - name: Post review comment on PR
@@ -39,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          SDK_MODEL: composer-2.5-fast
+          SDK_MODEL: composer-2.5
         run: node scripts/post-pr-review-comment.mjs review.json
 
       - name: Enforce merge gate
