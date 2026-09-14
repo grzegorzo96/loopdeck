@@ -56,7 +56,7 @@ export default function SignUpForm({ serverError }: Props) {
 
   const passwordHint =
     !errors.password && password.length > 0 && password.length < MIN_PASSWORD_LENGTH ? (
-      <p className="mt-1 text-xs text-blue-100/50">
+      <p className="text-muted-foreground mt-1 text-xs">
         {MIN_PASSWORD_LENGTH - password.length} more character
         {MIN_PASSWORD_LENGTH - password.length !== 1 ? "s" : ""} needed
       </p>
@@ -126,9 +126,9 @@ export default function SignUpForm({ serverError }: Props) {
 
       <ServerError message={serverError} />
 
-      <p className="text-center text-xs text-blue-100/60">
+      <p className="text-muted-foreground text-center text-xs">
         By creating an account you agree to our{" "}
-        <a href="/privacy" className="underline hover:text-white">
+        <a href="/privacy" className="hover:text-foreground underline underline-offset-2">
           Privacy policy
         </a>
         .

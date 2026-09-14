@@ -41,8 +41,11 @@ export const PATCH: APIRoute = async (context) => {
     } else if (parsed.data.action === "unsetFocus") {
       task = await unsetTaskFocus(auth.supabase, taskId);
     } else {
-      task = await completeTask(auth.supabase, taskId, parsed.data.localDate);
-      await recordTaskCompleted(auth.supabase, auth.user.id, task.id, parsed.data.localDate);
+      const completed = await completeTask(auth.supabase, taskId, parsed.data.localDate);
+      task = completed.task;
+      if (completed.newlyCompleted) {
+        await recordTaskCompleted(auth.supabase, auth.user.id, task.id, parsed.data.localDate);
+      }
     }
     return jsonResponse({ task });
   } catch (error) {

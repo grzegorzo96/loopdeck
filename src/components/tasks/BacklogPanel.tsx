@@ -10,22 +10,20 @@ interface BacklogPanelProps {
 export function BacklogPanel({ tasks, onAddToFocus, onDelete }: BacklogPanelProps) {
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-semibold tracking-wide text-white/60 uppercase">Backlog</h2>
+      <h2 className="font-serif text-xl font-semibold">Backlog</h2>
+      <p className="text-muted-foreground text-sm">Waiting. Not today, unless you move one in.</p>
 
       {tasks.length === 0 ? (
-        <p className="text-sm text-white/50">Backlog is empty.</p>
+        <p className="text-muted-foreground text-sm">Backlog is empty.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="divide-border border-border divide-y divide-dashed border-y border-dashed">
           {tasks.map((task) => (
-            <li
-              key={task.id}
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
-            >
-              <span className="min-w-0 flex-1 text-sm text-white">{task.title}</span>
+            <li key={task.id} className="flex items-center gap-2 py-3">
+              <span className="text-foreground min-w-0 flex-1 text-sm">{task.title}</span>
               <Button size="sm" variant="secondary" onClick={() => onAddToFocus(task)}>
                 Add to focus
               </Button>
-              <Button size="sm" variant="destructive" onClick={() => onDelete(task.id)}>
+              <Button size="sm" variant="ghost" className="text-muted-foreground" onClick={() => onDelete(task.id)}>
                 Delete
               </Button>
             </li>

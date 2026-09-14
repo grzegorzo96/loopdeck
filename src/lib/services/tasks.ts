@@ -78,17 +78,33 @@ export async function checkFocusLimit(supabase: SupabaseClient, focusDate: strin
   };
 }
 
+function mentionsFocusLimitExceeded(value: string): boolean {
+  return value.includes("focus_limit_exceeded");
+}
+
 export function isFocusLimitDbError(error: unknown): boolean {
-  if (error instanceof Error) {
-    return error.message.includes("focus_limit_exceeded");
-  }
-
   if (typeof error === "string") {
-    return error.includes("focus_limit_exceeded");
+    return mentionsFocusLimitExceeded(error);
   }
 
-  if (error && typeof error === "object" && "message" in error && typeof error.message === "string") {
-    return error.message.includes("focus_limit_exceeded");
+  if (error instanceof Error) {
+    return mentionsFocusLimitExceeded(error.message);
+  }
+
+  if (error && typeof error === "object") {
+    const err = error as { code?: string; message?: string; details?: string | null };
+
+    if (err.code === "P0001" && typeof err.message === "string" && mentionsFocusLimitExceeded(err.message)) {
+      return true;
+    }
+
+    if (typeof err.message === "string" && mentionsFocusLimitExceeded(err.message)) {
+      return true;
+    }
+
+    if (typeof err.details === "string" && mentionsFocusLimitExceeded(err.details)) {
+      return true;
+    }
   }
 
   return false;

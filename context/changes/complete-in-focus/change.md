@@ -1,7 +1,7 @@
 ---
 change_id: complete-in-focus
 title: Complete in focus
-status: implemented
+status: impl_reviewed
 created: 2026-09-14
 updated: 2026-09-14
 archived_at: null

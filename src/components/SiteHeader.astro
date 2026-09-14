@@ -1,0 +1,46 @@
+---
+const user = Astro.locals.user;
+const isApp = Astro.url.pathname.startsWith("/dashboard");
+const homeHref = user ? "/dashboard" : "/";
+---
+
+<header class="border-border/80 border-b">
+  <div
+    class:list={[
+      "mx-auto flex items-center justify-between gap-4 px-4 py-4 sm:px-6",
+      isApp ? "max-w-2xl" : "max-w-5xl",
+    ]}
+  >
+    <a href={homeHref} class="font-serif text-2xl tracking-tight text-foreground no-underline">
+      Loopdeck
+    </a>
+
+    {user ? (
+      <div class="flex items-center gap-4 text-sm">
+        {!isApp && (
+          <a href="/dashboard" class="text-muted-foreground transition-colors hover:text-foreground">
+            Today&apos;s focus
+          </a>
+        )}
+        {isApp && <span class="hidden text-muted-foreground sm:inline">{user.email}</span>}
+        <form method="POST" action="/api/auth/signout">
+          <button type="submit" class="text-muted-foreground transition-colors hover:text-foreground">
+            Sign out
+          </button>
+        </form>
+      </div>
+    ) : (
+      <nav class="flex items-center gap-3 text-sm sm:gap-4">
+        <a href="/auth/signin" class="text-muted-foreground transition-colors hover:text-foreground">
+          Sign in
+        </a>
+        <a
+          href="/auth/signup"
+          class="inline-flex h-9 items-center rounded-md bg-primary px-3.5 font-medium text-primary-foreground transition-colors hover:bg-[var(--forest-deep)]"
+        >
+          Create account
+        </a>
+      </nav>
+    )}
+  </div>
+</header>

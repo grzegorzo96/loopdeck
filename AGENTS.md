@@ -25,7 +25,10 @@ Loopdeck is a focus-limited todo web app (max 3 tasks per day) on Astro 7 SSR wi
 
 ## Testing Guidelines
 
-- No unit or integration test suite yet — only `scripts/smoke.mjs` via `npm run smoke`. Add tests as Loopdeck features land.
+- `npm run test:unit` — pure logic (no Supabase).
+- `npm run test:integration` — service-layer tests against local Supabase (export env per `vitest.config.ts`).
+- `npm run test:e2e` — Playwright browser tests (requires running server).
+- `npm run smoke` — auth-flow smoke against a live server.
 
 ## Commit & Pull Request Guidelines
 

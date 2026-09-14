@@ -79,7 +79,12 @@ export async function setTaskFocus(supabase: SupabaseClient, taskId: string, loc
     throw new Error(limit.reason);
   }
 
-  const result = await supabase.from("tasks").update({ focus_date: localDate }).eq("id", taskId).select("*").single();
+  const result = await supabase
+    .from("tasks")
+    .update({ focus_date: localDate })
+    .eq("id", taskId)
+    .select("*")
+    .maybeSingle();
 
   if (result.error) {
     if (isFocusLimitDbError(result.error)) {
@@ -96,7 +101,12 @@ export async function setTaskFocus(supabase: SupabaseClient, taskId: string, loc
 }
 
 export async function unsetTaskFocus(supabase: SupabaseClient, taskId: string): Promise<Task> {
-  const result = await supabase.from("tasks").update({ focus_date: null }).eq("id", taskId).select("*").single();
+  const result = await supabase
+    .from("tasks")
+    .update({ focus_date: null })
+    .eq("id", taskId)
+    .select("*")
+    .maybeSingle();
 
   if (result.error) throw result.error;
   if (!result.data) throw new Error("not_found");
@@ -104,7 +114,11 @@ export async function unsetTaskFocus(supabase: SupabaseClient, taskId: string): 
   return result.data as Task;
 }
 
-export async function completeTask(supabase: SupabaseClient, taskId: string, localDate: string): Promise<Task> {
+export async function completeTask(
+  supabase: SupabaseClient,
+  taskId: string,
+  localDate: string,
+): Promise<{ task: Task; newlyCompleted: boolean }> {
   const dateValidation = validateFocusDate(localDate);
   if (!dateValidation.ok) {
     throw new Error("invalid_focus_date");
@@ -123,7 +137,7 @@ export async function completeTask(supabase: SupabaseClient, taskId: string, loc
   }
 
   if (task.completed_at) {
-    return task;
+    return { task, newlyCompleted: false };
   }
 
   const result = await supabase
@@ -136,7 +150,7 @@ export async function completeTask(supabase: SupabaseClient, taskId: string, loc
   if (result.error) throw result.error;
   if (!result.data) throw new Error("not_found");
 
-  return result.data as Task;
+  return { task: result.data as Task, newlyCompleted: true };
 }
 
 export async function deleteTask(supabase: SupabaseClient, taskId: string): Promise<void> {

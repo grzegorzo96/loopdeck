@@ -1,7 +1,7 @@
 ---
 change_id: first-focus-capture
 title: First focus capture
-status: implemented
+status: impl_reviewed
 created: 2026-09-14
 updated: 2026-09-14
 archived_at: null

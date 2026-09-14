@@ -25,17 +25,17 @@ export function SwapModal({ pendingTask, focusTasks, onConfirm, onCancel }: Swap
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+    <div className="bg-foreground/40 fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 p-6 text-white shadow-xl"
+        className="bg-card text-card-foreground border-border w-full max-w-md rounded-sm border p-6 shadow-lg"
         role="dialog"
         aria-labelledby="swap-title"
       >
-        <h2 id="swap-title" className="text-lg font-semibold">
+        <h2 id="swap-title" className="font-serif text-2xl font-semibold">
           Three for today is the whole day
         </h2>
-        <p className="mt-2 text-sm text-white/70">
-          Swap one out to add <span className="font-medium text-white">{pendingTask.title}</span>.
+        <p className="text-muted-foreground mt-2 text-sm">
+          Swap one out to add <span className="text-foreground font-medium">{pendingTask.title}</span>.
         </p>
 
         <ul className="mt-4 space-y-2">
@@ -43,8 +43,8 @@ export function SwapModal({ pendingTask, focusTasks, onConfirm, onCancel }: Swap
             <li key={task.id}>
               <label
                 className={cn(
-                  "flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2 text-sm",
-                  swapOutId === task.id ? "border-blue-400/60 bg-blue-500/10" : "border-white/10",
+                  "flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2 text-sm",
+                  swapOutId === task.id ? "border-primary bg-primary/5" : "border-border",
                 )}
               >
                 <input
@@ -55,9 +55,9 @@ export function SwapModal({ pendingTask, focusTasks, onConfirm, onCancel }: Swap
                   onChange={() => {
                     setSwapOutId(task.id);
                   }}
-                  className="accent-blue-400"
+                  className="accent-primary"
                 />
-                <span className={task.completed_at ? "text-white/50 line-through" : ""}>{task.title}</span>
+                <span className={task.completed_at ? "text-muted-foreground line-through" : ""}>{task.title}</span>
               </label>
             </li>
           ))}

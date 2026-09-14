@@ -1,7 +1,7 @@
 ---
 change_id: task-schema-rls
 title: Task schema with RLS and focus-count contract
-status: implemented
+status: impl_reviewed
 created: 2026-09-14
 updated: 2026-09-14
 archived_at: null

@@ -80,6 +80,7 @@ export function useTasks() {
 
   useEffect(() => {
     const syncDate = () => {
+      if (document.visibilityState !== "visible") return;
       const next = getLocalDate();
       setLocalDate((current) => (current === next ? current : next));
     };

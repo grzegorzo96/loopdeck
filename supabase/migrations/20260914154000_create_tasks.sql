@@ -3,7 +3,7 @@
 CREATE TABLE public.tasks (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES auth.users (id) ON DELETE CASCADE,
-  title text NOT NULL,
+  title text NOT NULL CHECK (char_length(title) <= 500),
   created_at timestamptz NOT NULL DEFAULT now(),
   focus_date date,
   completed_at timestamptz
@@ -57,6 +57,8 @@ BEGIN
   IF TG_OP = 'UPDATE' AND OLD.focus_date IS NOT DISTINCT FROM NEW.focus_date THEN
     RETURN NEW;
   END IF;
+
+  PERFORM pg_advisory_xact_lock(hashtext(NEW.user_id::text || NEW.focus_date::text));
 
   SELECT COUNT(*)
   INTO slot_count

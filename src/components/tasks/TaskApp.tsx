@@ -20,10 +20,16 @@ export function TaskApp() {
       await createTask(title, true);
     } catch (err) {
       if (isTaskApiError(err) && err.code === "focus_limit_exceeded") {
-        setActionError("Three for today is the whole day. Unset one or swap from backlog.");
-      } else {
-        setActionError(err instanceof Error ? err.message : "Could not add task");
+        try {
+          const task = await createTask(title, false);
+          setSwapPending(task);
+          return;
+        } catch (innerErr) {
+          setActionError(innerErr instanceof Error ? innerErr.message : "Could not add task");
+          throw innerErr;
+        }
       }
+      setActionError(err instanceof Error ? err.message : "Could not add task");
       throw err;
     }
   }
@@ -63,13 +69,13 @@ export function TaskApp() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-8 p-4">
+    <div className="mx-auto w-full max-w-2xl space-y-8">
       {isEmpty && <EmptyState />}
 
       <TaskAddForm onSubmit={handleCreate} disabled={loading} />
 
       {(error ?? actionError) && (
-        <p className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+        <p className="border-destructive/30 bg-destructive/5 text-destructive rounded-md border px-3 py-2 text-sm">
           {error ?? actionError}
         </p>
       )}

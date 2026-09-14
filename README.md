@@ -1,8 +1,6 @@
-# 10x Astro Starter
+# Loopdeck
 
-![](./public/template.png)
-
-A modern, opinionated starter template for building fast, accessible web applications.
+Loopdeck is a focus-limited todo web app: instead of growing an endless list, you pick **at most three tasks for today** — that hard cap is the product, not a preference setting. Tasks live in a personal backlog; moving one into today's focus succeeds only while fewer than three slots are taken, and the server refuses a fourth until you explicitly swap one out. Authentication uses Supabase (email/password) with cookie-based SSR sessions; routes like `/dashboard` are protected in middleware and redirect unauthenticated visitors to sign-in. Built with Astro 7 (SSR), React 19 islands, Tailwind 4, and deployed to Cloudflare Workers. **Local run:** `npm install`, start Supabase (`npx supabase start`), copy the printed URL and anon key into `.env` and `.dev.vars` (from `.env.example`), then `npm run dev` — see [Supabase Configuration](#supabase-configuration) and [Getting Started](#getting-started) below.
 
 ## Tech Stack
 
@@ -20,12 +18,7 @@ A modern, opinionated starter template for building fast, accessible web applica
 
 ## Getting Started
 
-1. Clone the repository:
-
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+1. Clone the repository and enter the project directory.
 
 2. Install dependencies:
 
@@ -178,7 +171,7 @@ BASE_URL=http://localhost:4321 npm run smoke
 
 It needs a reachable Supabase instance (local or cloud) with email confirmation disabled.
 
-> **Note:** this script exists primarily to guard the development of the starter itself — it is a fast sanity check that dependency upgrades did not break the build, the Cloudflare adapter or the Supabase auth flow. It is **not** a substitute for a real test suite. Once you build your own product on top of this starter, add proper tests (unit, integration, end-to-end) suited to your application.
+> **Note:** the smoke script is a fast sanity check that the build, Cloudflare adapter, and Supabase auth flow still work after dependency upgrades. It is **not** a substitute for the unit, integration, and E2E suites under `tests/`.
 
 ## CI
 

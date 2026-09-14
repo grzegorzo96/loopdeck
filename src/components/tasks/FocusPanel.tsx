@@ -9,51 +9,73 @@ interface FocusPanelProps {
   onDelete: (taskId: string) => Promise<void>;
 }
 
+const SLOT_COUNT = 3;
+
 export function FocusPanel({ tasks, onUnset, onComplete, onDelete }: FocusPanelProps) {
   const doneCount = tasks.filter((task) => task.completed_at).length;
+  const emptySlots = Math.max(0, SLOT_COUNT - tasks.length);
 
   return (
-    <section className="space-y-3">
-      <div className="flex items-baseline justify-between">
-        <h2 className="text-sm font-semibold tracking-wide text-white/60 uppercase">Today&apos;s focus</h2>
+    <section className="bg-card border-border rounded-sm border px-4 py-5 sm:px-5">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="font-serif text-xl font-semibold">Today&apos;s focus</h2>
         {tasks.length > 0 && (
-          <span className="text-xs text-white/50">
+          <span className="text-muted-foreground text-sm">
             {doneCount} of {tasks.length} done
           </span>
         )}
       </div>
 
-      {tasks.length === 0 ? (
-        <p className="text-sm text-white/50">No tasks in focus yet.</p>
-      ) : (
-        <ul className="space-y-2">
-          {tasks.map((task) => (
-            <li
-              key={task.id}
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+      {tasks.length === 0 ? <p className="text-muted-foreground mt-4 text-sm">No tasks in focus yet.</p> : null}
+
+      <ul className="mt-4 space-y-0">
+        {tasks.map((task, index) => (
+          <li
+            key={task.id}
+            className="border-border flex items-center gap-2 border-b border-dashed py-3 first:border-t"
+          >
+            <span className="text-muted-foreground w-5 shrink-0 font-serif">{index + 1}</span>
+            <span
+              className={cn(
+                "min-w-0 flex-1 text-sm",
+                task.completed_at ? "text-muted-foreground line-through" : "text-foreground",
+              )}
             >
-              <span
+              {task.title}
+            </span>
+            {!task.completed_at && (
+              <Button size="sm" variant="secondary" onClick={() => onComplete(task.id)}>
+                Done
+              </Button>
+            )}
+            <Button size="sm" variant="ghost" onClick={() => onUnset(task.id)}>
+              Later
+            </Button>
+            <Button size="sm" variant="ghost" className="text-muted-foreground" onClick={() => onDelete(task.id)}>
+              Delete
+            </Button>
+          </li>
+        ))}
+      </ul>
+
+      {emptySlots > 0 && (
+        <div className="space-y-0" aria-hidden="true">
+          {Array.from({ length: emptySlots }, (_, index) => {
+            const number = tasks.length + index + 1;
+            return (
+              <div
+                key={number}
                 className={cn(
-                  "min-w-0 flex-1 text-sm",
-                  task.completed_at ? "text-white/50 line-through" : "text-white",
+                  "border-border flex items-end gap-3 border-b border-dashed py-3",
+                  tasks.length === 0 && index === 0 && "border-t",
                 )}
               >
-                {task.title}
-              </span>
-              {!task.completed_at && (
-                <Button size="sm" variant="secondary" onClick={() => onComplete(task.id)}>
-                  Done
-                </Button>
-              )}
-              <Button size="sm" variant="ghost" onClick={() => onUnset(task.id)}>
-                Unset
-              </Button>
-              <Button size="sm" variant="destructive" onClick={() => onDelete(task.id)}>
-                Delete
-              </Button>
-            </li>
-          ))}
-        </ul>
+                <span className="text-muted-foreground/70 w-5 font-serif">{number}</span>
+                <span className="border-border mb-1 h-px flex-1 border-b border-dashed" />
+              </div>
+            );
+          })}
+        </div>
       )}
     </section>
   );

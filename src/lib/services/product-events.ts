@@ -9,14 +9,15 @@ interface RecordEventInput {
 }
 
 export async function recordEvent(supabase: SupabaseClient, input: RecordEventInput): Promise<void> {
-  try {
-    await supabase.from("product_events").insert({
-      user_id: input.userId,
-      event_type: input.eventType,
-      metadata: input.metadata ?? {},
-    });
-  } catch {
-    // Swallow event recording failures.
+  const { error } = await supabase.from("product_events").insert({
+    user_id: input.userId,
+    event_type: input.eventType,
+    metadata: input.metadata ?? {},
+  });
+
+  if (error && error.code !== "23505") {
+    // eslint-disable-next-line no-console -- plan requires logging failed event inserts without failing user ops
+    console.error("Failed to record product event:", input.eventType, error.message);
   }
 }
 
