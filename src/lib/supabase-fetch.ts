@@ -2,11 +2,11 @@ const JWT_FUTURE_CODE = "PGRST303";
 const JWT_FUTURE_MESSAGE = "JWT issued at future";
 const DEFAULT_DELAYS_MS = [400, 1000];
 
-export type JwtSkewRetryOptions = {
+export interface JwtSkewRetryOptions {
   fetch?: typeof fetch;
   sleep?: (ms: number) => Promise<void>;
   delaysMs?: number[];
-};
+}
 
 function sleepMs(ms: number): Promise<void> {
   return new Promise((resolve) => {
