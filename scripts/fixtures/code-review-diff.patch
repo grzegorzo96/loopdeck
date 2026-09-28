@@ -1,0 +1,21 @@
+diff --git a/src/lib/services/tasks.ts b/src/lib/services/tasks.ts
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/lib/services/tasks.ts
++++ b/src/lib/services/tasks.ts
+@@ -62,7 +62,7 @@ export async function checkFocusLimit(supabase: SupabaseClient, focusDate: strin
+ 
+   const currentCount = await countFocusSlots(supabase, validation.date);
+ 
+-  if (currentCount >= FOCUS_LIMIT) {
++  if (currentCount > FOCUS_LIMIT) {
+     return {
+       allowed: false,
+       currentCount,
+@@ -38,6 +38,7 @@ export async function countFocusSlots(supabase: SupabaseClient, focusDate: string
+   const { count, error } = await supabase
+     .from("tasks")
+     .select("*", { count: "exact", head: true })
++    .eq("is_completed", false)
+     .eq("focus_date", focusDate);
+ 
+   if (error) {

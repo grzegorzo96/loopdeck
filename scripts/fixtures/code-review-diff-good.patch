@@ -1,0 +1,14 @@
+diff --git a/src/lib/services/tasks.ts b/src/lib/services/tasks.ts
+index 1a2b3c4..9a8b7c6 100644
+--- a/src/lib/services/tasks.ts
++++ b/src/lib/services/tasks.ts
+@@ -65,7 +65,7 @@ export async function checkFocusLimit(supabase: SupabaseClient, focusDate: strin
+   if (currentCount >= FOCUS_LIMIT) {
+     return {
+       allowed: false,
+       currentCount,
+       limit: FOCUS_LIMIT,
+-      reason: "focus_limit_exceeded",
++      reason: "focus_limit_exceeded", // PRD: refuse fourth slot; user must swap
+     };
+   }
